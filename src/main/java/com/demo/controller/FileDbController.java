@@ -2,6 +2,8 @@ package com.demo.controller;
 
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.demo.excel.ExcelRW;
 import com.demo.model.DbFile;
 import com.demo.model.UploadFileResponse;
+import com.demo.responseEntity.FileInfo;
 import com.demo.service.FileDbService;
 
 
@@ -32,6 +36,10 @@ public class FileDbController {
 	
 	@Autowired
 	FileDbService fileDbService;
+	
+	
+	
+	
 	
 	
 		//http://localhost:8080/api/save_file
@@ -51,9 +59,7 @@ public class FileDbController {
 			
 	        return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
 	                file.getContentType(), file.getSize());
-	        
-	        
-			
+	      
 		}
 		
 		@GetMapping("/downloadFile/{fileId}")
@@ -65,6 +71,7 @@ public class FileDbController {
 	                .contentType(MediaType.parseMediaType(dbFile.getFileType()))
 	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
 	                .body(new ByteArrayResource(dbFile.getData()));
+	        
 	    }
 		
 		
@@ -90,6 +97,34 @@ public class FileDbController {
 	        return fileUris;
 	        
 			
+	    }
+		
+
+		@CrossOrigin("http://localhost:3000")
+		@GetMapping("/getAvailable/allFiles")
+	    public List<FileInfo> getAvailableAll() throws UnknownHostException {
+	        // Load file from database
+	        List<DbFile> dbFiles = fileDbService.getAllfiles();
+	        // file link
+	    	InetAddress ip = InetAddress.getLocalHost();
+	    	String IpAddress = ip.getHostAddress();
+	    	String IP_PORT_URL="http://"+IpAddress+":8080/downloadFile/";
+	        
+	        List<FileInfo> fileinfos= dbFiles.stream().map(file -> {
+	        	
+	        	FileInfo fileInfo=new FileInfo();
+	        	fileInfo.setFile_type(file.getFileName());
+	        	fileInfo.setNewVersion(file.getVersion());
+	        	long filesize=file.getSize()/(1024);
+	        	fileInfo.setFile_size(String.valueOf(filesize+"KB"));
+	        	fileInfo.setFile_status(file.getFile_status());
+	        	fileInfo.setFile_link(IP_PORT_URL+file.getId());
+	        	fileInfo.setMessage(file.getMessage());
+	        
+	        	return fileInfo;
+	        }).collect(Collectors.toList());
+	        
+	        return fileinfos;
 	    }
 		
 		
