@@ -38,10 +38,6 @@ public class FileDbController {
 	FileDbService fileDbService;
 	
 	
-	
-	
-	
-	
 		//http://localhost:8080/api/save_file
 		@PostMapping("/api/save_file/{deviceId}")
 		public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file,@PathVariable String deviceId) throws IOException {

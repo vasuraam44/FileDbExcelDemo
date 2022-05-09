@@ -247,20 +247,22 @@ public class ExcelService {
 		Device device=deviceRepository.findByDeviceNo(request.getDevice_info().getSerialnumber()).get();
 		System.out.println("======================");
 		System.out.println(device);
-		//DbFile dbfile=fileDbService.getFile(device.getEvtfileId());
+		DbFile dbfile=fileDbService.getFile(device.getEvtfileId());
+		
 		ApkDetails apkDetails=apkDeviceRepository.findByDevice(device);
 		if(request.getStatus_info().getStatus().equalsIgnoreCase("success")) {
 		
 		System.out.println("======================");
 		System.out.println(apkDetails);
 		apkDetails.setStatus(request.getStatus_info().getStatus());
-		//apkDetails.setCurrent_version(dbfile.getVersion());
+		apkDetails.setDownloaded_version(dbfile.getVersion());
 		return apkDeviceRepository.save(apkDetails);
 		
 		}else {
 			System.out.println("======================");
 			System.out.println(apkDetails);
 			apkDetails.setStatus(request.getStatus_info().getStatus());
+			apkDetails.setDownloaded_version(null);
 			return apkDeviceRepository.save(apkDetails);
 			
 		}

@@ -305,7 +305,7 @@ public class ExcelController {
 						fileInfo.setFile_status("Not availabale");
 						responseModel.setFile_info(fileInfo);
 
-						return new ResponseEntity<>(responseModel,HttpStatus.OK);
+						return new ResponseEntity<>(responseModel, HttpStatus.OK);
 
 					}
 
@@ -313,12 +313,23 @@ public class ExcelController {
 					System.out.println("==================APKDETAILS============================");
 					// ApkDetails apkDetails=apkDeviceRepository.findByDevice(device);
 					String currentversion = request.getFile_info().getCurrentversion();
-					fileService.UpdateApkDetails(device, currentversion);
 
 					DbFile dbFile = fileDbService.getFile(device.getEvtfileId());
 
 					// new version
 					String newVersion = dbFile.getVersion();
+					if (currentversion.compareTo(newVersion) == 1) {
+
+						FileInfo fileInfo = new FileInfo();
+						fileInfo.setFile_type(filetype);
+						fileInfo.setFile_status("Not availabale");
+						responseModel.setFile_info(fileInfo);
+
+						return new ResponseEntity<>(responseModel, HttpStatus.OK);
+
+					}
+
+					fileService.UpdateApkDetails(device, currentversion);
 
 					// file Size in MB
 					long sizebytes = dbFile.getSize();
@@ -372,8 +383,7 @@ public class ExcelController {
 						fileInfo.setFile_status("Not availabale");
 						responseModel.setFile_info(fileInfo);
 
-						return new ResponseEntity<>(responseModel,HttpStatus.OK);
-						
+						return new ResponseEntity<>(responseModel, HttpStatus.OK);
 
 					}
 
@@ -386,6 +396,17 @@ public class ExcelController {
 
 					// new version
 					String newVersion = dbFile.getVersion();
+
+					if (currentversion.compareTo(newVersion) == 1) {
+
+						FileInfo fileInfo = new FileInfo();
+						fileInfo.setFile_type(filetype);
+						fileInfo.setFile_status("Not availabale");
+						responseModel.setFile_info(fileInfo);
+
+						return new ResponseEntity<>(responseModel, HttpStatus.OK);
+
+					}
 
 					// file Size in MB
 					long sizebytes = dbFile.getSize();
@@ -438,8 +459,8 @@ public class ExcelController {
 						fileInfo.setFile_status("Not availabale");
 						responseModel.setFile_info(fileInfo);
 
-						return new ResponseEntity<>(responseModel,HttpStatus.OK);
-						
+						return new ResponseEntity<>(responseModel, HttpStatus.OK);
+
 					}
 
 					// updating APK details Current version and status
@@ -452,6 +473,17 @@ public class ExcelController {
 
 					// new version
 					String newVersion = dbFile.getVersion();
+
+					if (currentversion.compareTo(newVersion) == 1) {
+
+						FileInfo fileInfo = new FileInfo();
+						fileInfo.setFile_type(filetype);
+						fileInfo.setFile_status("Not availabale");
+						responseModel.setFile_info(fileInfo);
+
+						return new ResponseEntity<>(responseModel, HttpStatus.OK);
+
+					}
 
 					// file Size in MB
 					long sizebytes = dbFile.getSize();
@@ -496,28 +528,29 @@ public class ExcelController {
 	public ResponseEntity<ResponseAck> getSucessResponseJson(@RequestBody RequestSuccessModel request) {
 		try {
 			System.out.println(request);
-			if (request.getStatus_info().getStatus().equals("success")) {
+			
+			
+			if (request.getStatus_info().getStatus().equalsIgnoreCase("success")) {
 
 				ApkDetails apkDetails = fileService.UpdateApkDetailsStatus(request);
 				System.out.println("================================");
 				System.out.println(apkDetails.getStatus());
 				if (apkDetails == null) {
 					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-					
+
 				}
 
-					LocalDateTime dateTime = LocalDateTime.now();
-					String timeStamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(dateTime);
+				LocalDateTime dateTime = LocalDateTime.now();
+				String timeStamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(dateTime);
 
-					ResponseAck responseAck = new ResponseAck();
-					responseAck.setTime_stamp(timeStamp);
-					responseAck.setRequest_type(request.getRequest_type());
-					responseAck.setDevice_info(request.getDevice_info());
-					responseAck.setAck_info("Success");
-					return new ResponseEntity<>(responseAck, HttpStatus.OK);
+				ResponseAck responseAck = new ResponseAck();
+				responseAck.setTime_stamp(timeStamp);
+				responseAck.setRequest_type(request.getRequest_type());
+				responseAck.setDevice_info(request.getDevice_info());
+				responseAck.setAck_info("Success");
+				return new ResponseEntity<>(responseAck, HttpStatus.OK);
 
-
-			}else {
+			} else {
 				ApkDetails apkDetails = fileService.UpdateApkDetailsStatus(request);
 				System.out.println("================================");
 				System.out.println(apkDetails.getStatus());
@@ -535,22 +568,8 @@ public class ExcelController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	@CrossOrigin()
 	@GetMapping("/apkdetails")

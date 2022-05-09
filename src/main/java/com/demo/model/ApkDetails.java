@@ -31,6 +31,8 @@ public class ApkDetails {
 	
 	private String current_version;
 	
+	private String downloaded_version;
+	
 	private String status;
 	
 
