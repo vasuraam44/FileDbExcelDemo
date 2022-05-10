@@ -126,7 +126,6 @@ public class ExcelController {
 				// fileService.saveToDevice(files, version);
 				fileService.saveFileDB(excelfile, apkfile, evtfile, evtpfile, evtpsfile, version);
 
-				
 				message = "Uploaded the file successfully";
 				return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
 
