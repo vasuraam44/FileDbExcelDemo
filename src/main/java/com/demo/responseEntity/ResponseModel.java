@@ -1,5 +1,7 @@
 package com.demo.responseEntity;
 
+import java.sql.Timestamp;
+
 
 public class ResponseModel {
 	

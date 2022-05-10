@@ -221,9 +221,9 @@ public class ExcelService {
 		apkDetails.setStatus("in progress");
 		apkDetails.setCurrent_version(curentversion);
 		
-//		System.out.println("==============================================================");
-//		System.out.println(apkDetails);
-//		System.out.println("==============================================================");
+		System.out.println("==============================================================");
+		System.out.println(apkDetails);
+		System.out.println("==============================================================");
 		
 		return apkDeviceRepository.save(apkDetails);
 	}

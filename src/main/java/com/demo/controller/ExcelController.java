@@ -42,6 +42,10 @@ public class ExcelController {
 	@Autowired
 	FileDbService fileDbService;
 
+	// file link
+//	InetAddress ip = InetAddress.getLocalHost();
+//	String IpAddress = ip.getHostAddress();
+//	String IP_PORT_URL="http://"+IpAddress+":8080/downloadFile/";
 
 	@CrossOrigin()
 	@PostMapping("/")
@@ -74,7 +78,7 @@ public class ExcelController {
 
 	}
 
-	// ----- File Upload multiple file array
+	// ----- File Upload
 
 	@CrossOrigin()
 	@PostMapping("/upload")
@@ -82,16 +86,19 @@ public class ExcelController {
 			@RequestParam("version") String version) {
 		String message = "";
 
+		System.out.println("----------------------------------------------------");
 		System.out.println(version);
-		
-		
+		System.out.println("----------------------------------------------------");
+		// MultipartFile file1=files[0];
 		if (ExcelHelper.hasExcelFormat(files[0]) || ExcelHelper.hasExcelFormat(files[1])) {
 			try {
 
-				
+				// System.out.println("------------------------------------------------------------");
+				// System.out.println(files[0].getContentType().equals("application/vnd.android.package-archive"));
+				// System.out.println(files[0].getContentType().equals("application/vnd.android.package-archive")||files[1].getContentType().equals("application/vnd.android.package-archive"));
 				if (files[0].getContentType().equals("application/vnd.android.package-archive")
 						|| files[1].getContentType().equals("application/vnd.android.package-archive")) {
-				
+					// MultipartFile file2=files[0];
 
 					fileService.saveToDevice(files, version);
 					// System.out.println("------------------------------------------------------------");
@@ -121,13 +128,17 @@ public class ExcelController {
 			@RequestParam("version") String version) {
 
 		String message = "";
-		
-		
+		System.out.println("----------------------------------------------------");
+		System.out.println(version);
+		System.out.println("----------------------------------------------------");
+		// MultipartFile file1=files[0];
 		if (ExcelHelper.hasExcelFormat(excelfile)) {
 			try {
 
+				// fileService.saveToDevice(files, version);
 				fileService.saveFileDB(excelfile, apkfile, evtfile, evtpfile, evtpsfile, version);
 
+				// System.out.println("------------------------------------------------------------");
 				message = "Uploaded the file successfully";
 				return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
 
@@ -147,6 +158,9 @@ public class ExcelController {
 			@RequestParam("notemessage") String notemessage) {
 
 		String message = "";
+		System.out.println("----------------------------------------------------");
+		System.out.println(version);
+		System.out.println("----------------------------------------------------");
 
 		if (ExcelHelper.hasExcelFormat(excelfile)) {
 			try {
@@ -154,6 +168,7 @@ public class ExcelController {
 				// fileService.saveToDevice(files, version);
 				fileService.saveEvtFileDB(excelfile, evtfile, version, notemessage);
 
+				// System.out.println("------------------------------------------------------------");
 				message = "Uploaded the file successfully";
 				return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
 
