@@ -42,7 +42,7 @@ public class ExcelController {
 	@Autowired
 	FileDbService fileDbService;
 
-	
+
 	@CrossOrigin()
 	@PostMapping("/")
 	public String Connection() {
@@ -82,18 +82,24 @@ public class ExcelController {
 			@RequestParam("version") String version) {
 		String message = "";
 
-		
-		
+
 		if (ExcelHelper.hasExcelFormat(files[0]) || ExcelHelper.hasExcelFormat(files[1])) {
 			try {
 
 				
 				if (files[0].getContentType().equals("application/vnd.android.package-archive")
 						|| files[1].getContentType().equals("application/vnd.android.package-archive")) {
+
+					
+
+					fileService.saveToDevice(files, version);
+					
+
 				
 					
 					fileService.saveToDevice(files, version);
 				
+
 					message = "Uploaded the file successfully";
 					return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
 				} else {
@@ -121,14 +127,14 @@ public class ExcelController {
 
 		String message = "";
 		
-		
+
 		if (ExcelHelper.hasExcelFormat(excelfile)) {
 			try {
 
 				// fileService.saveToDevice(files, version);
 				fileService.saveFileDB(excelfile, apkfile, evtfile, evtpfile, evtpsfile, version);
 
-				
+
 				message = "Uploaded the file successfully";
 				return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
 
@@ -582,5 +588,13 @@ public class ExcelController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	
+	
+	
 
 }
+
+
+//Excel Controller Note for NEW BRANCH CHECK 
+
