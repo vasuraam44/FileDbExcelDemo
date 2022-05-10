@@ -134,17 +134,6 @@ public class FileDbController {
 			return "readExcelSucess";
 	    }
 		
-		//Test NEW BRANCH
-		
-		@GetMapping("/file/checkdemo")
-	    public String WriteCheckFor() throws EncryptedDocumentException, IOException {
-	        
-			ExcelRW excelRW=new ExcelRW();
-			
-			excelRW.writeLinkToExcel("D1", "Link1");
-			return "readExcelSucess";
-	    }
-		
 	
 	
 	
